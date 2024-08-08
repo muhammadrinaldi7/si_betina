@@ -14,9 +14,10 @@ const Index = () =>{
     useEffect(() => {
         if(!isAuth){
             navigate("/", { replace: true });
+        }else{
+            getUser();
         }
-        getUser();
-    })
+    }, [ isAuth ])
     return (
         <LayoutPage>
         <div className="w-ful items-center mx-auto my-auto py-28 px-4 text-center flex flex-col justify-center">
