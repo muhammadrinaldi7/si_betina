@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../Dibimbing/Rdibimbing"
+		},
+		{
+			"path": "C:/xampp/htdocs"
+		},
+		{
+			"name": "si_betina",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Rdibimbing"
+	}
+}
