@@ -20,14 +20,18 @@ const NavbarSm = () => {
             </NavLink>
         </li>
         <li>
+        <NavLink to="/checkup">
             <a className="tooltip" data-tip="Pemeriksaan">
             <FontAwesomeIcon icon={faFileMedical} />
             </a>
+        </NavLink>
         </li>
         <li>
+        <NavLink to="/identity">
             <a className="tooltip" data-tip="Data Pribadi">
                <FontAwesomeIcon icon={faUser}/>
             </a>
+        </NavLink>
         </li>
         </ul>
 

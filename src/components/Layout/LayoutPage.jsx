@@ -16,11 +16,12 @@ const LayoutPage = ({children}) => {
         }
     })
     const handleLogout = async () => {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${isAuth}`
-        await axios.post(`${import.meta.env.VITE_REACT_API_URL}/logout`).then(() =>{
-            localStorage.removeItem('token');
+        localStorage.removeItem('token');
         navigate("/", { replace: true });
-        })
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${isAuth}`
+        // await axios.post(`${import.meta.env.VITE_REACT_API_URL}/logout`).then(() =>{
+        // localStorage.removeItem('token');
+        // })
     }
     return (
         <>

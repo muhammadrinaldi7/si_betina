@@ -24,14 +24,15 @@ const NavbarLg = () => {
             </NavLink>
         </li>
         <li>
-            <a>
-            <FontAwesomeIcon icon={faFileMedical} />
-            Pemeriksaan
-            </a>
+        <NavLink to="/checkup">
+            <a> <FontAwesomeIcon icon={faFileMedical} /> Pemeriksaan</a>
+        </NavLink>
         </li>
-        <li><a>
-            <FontAwesomeIcon icon={faUser} />
-            Identitas</a></li>
+        <li>
+            <NavLink to="/identity">
+            <a><FontAwesomeIcon icon={faUser} /> Identitas</a>
+            </NavLink>
+        </li>
         </ul>
     </div>
     <div className="navbar-end">
