@@ -123,7 +123,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="" htmlFor="tgl_haid_terakhir">Tanggal Haid Terakhir</label>
+              <label className="" htmlFor="tgl_haid_terakhir">Tanggal Haid Terakhir</label> <br />
               <input
                 className="w-full rounded-lg border-gray-200 p-3 text-sm"
                 placeholder="Tanggal Haid Terakhir"
@@ -149,7 +149,7 @@ const Index = () => {
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="" htmlFor="nama_suami">Taksiran Persalinan</label>
+              <label className="" htmlFor="nama_suami">Taksiran Persalinan</label> <br />
               <input
                 className="w-full rounded-lg border-gray-200 p-3 text-sm"
                 placeholder="Taksiran Persalinan"
