@@ -179,7 +179,7 @@ const Index = () => {
               <input
                 className="w-full rounded-lg border-gray-200 p-3 text-sm"
                 placeholder="Nama Suami"
-                type="nama_suami"
+                type="date"
                 id="nama_suami"
               />
             </div>
