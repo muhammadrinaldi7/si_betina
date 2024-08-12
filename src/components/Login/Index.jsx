@@ -32,7 +32,6 @@ const Index = () =>{
     };
     
     useEffect(() => {
-        
         const registrationSuccess = sessionStorage.getItem('registrationSuccess');
         if(registrationSuccess){
             toast.success('Registrasi Berhasil');

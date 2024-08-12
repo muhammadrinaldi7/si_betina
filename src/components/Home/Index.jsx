@@ -2,24 +2,56 @@ import React, { useEffect, useState } from "react";
 import pregencyImg from "../../assets/pregency.png"
 import LayoutPage from "../Layout/LayoutPage"
 import axios from "axios";
+import { useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
 const Index = () =>{
     const isAuth = localStorage.getItem('token');
     const [user, setUser] = useState({});
+    const navigate = useNavigate();
     const getUser = async () =>{
-        axios.defaults.headers.common['Authorization'] = `Bearer ${isAuth}`
-        await axios.get(`${import.meta.env.VITE_REACT_API_URL}/user`).then((response) =>{
-            setUser(response.data);
-        })
+        try {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${isAuth}`
+            await axios.get(`${import.meta.env.VITE_REACT_API_URL}/user`).then((response) =>{
+                setUser(response.data);
+                sessionStorage.setItem('user_id', response.data.id);
+            })
+        } catch (error) {
+           if(error.response.status === 401){
+            localStorage.removeItem('token');
+            navigate("/", { replace: true });
+           }
+        }
     }
+    function handleToast () {
+        if(sessionStorage.getItem('identityAddSuccess')){
+            toast.success("Data Pendaftaran Berhasil", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",}
+            );
+            setTimeout(() => {
+                sessionStorage.removeItem('identityAddSuccess');
+            } , 4000)
+        }
+    }
+    console.log(user)
     useEffect(() => {
+        
         if(!isAuth){
             navigate("/", { replace: true });
         }else{
             getUser();
         }
+        handleToast()
     }, [ isAuth ])
     return (
         <LayoutPage>
+            <ToastContainer />
         <div className="w-ful items-center mx-auto my-auto py-28 px-4 text-center flex flex-col justify-center">
             <img src={pregencyImg} className="" alt="" />
             <h1 className="text-2xl font-extrabold text-gray-800/50 lg:text-3xl">
