@@ -53,15 +53,17 @@ const Index = () => {
     let day = hitungHari === 0 ? 31 : hitungHari;
     let month = (haidMonth-3) === 0 ? 12 : (haidMonth-3) === -1 ? 11 : (haidMonth-3) === -2 ? 10 : (haidMonth-3)
     let year = ((haidMonth===3 && haidDay>=25)||(haidMonth>=4 && haidMonth<=12)) ? haidYear+1 : haidYear
+    let monthConv = haidDay > 22 ? month+1 : month
+    console.log(monthConv)
     let dayStr = day.toString().padStart(2, '0');
-    let monthStr = month.toString().padStart(2, '0');
+    let monthStr = monthConv.toString().padStart(2, '0');
     let yearStr = year.toString();
-
+    
     // Menggabungkan menjadi string tanggal
     let resultDate = [dayStr, monthStr, yearStr].reverse().join('-');
     return resultDate
   }
-
+  
   const trimesterKehamilan = () => {
     let trim = 0;
     if(umurKehamilan>0 && umurKehamilan<=12){
@@ -136,13 +138,12 @@ const Index = () => {
     getIdentitasUser();
   }, [tglKunjungan, tglHaidTerakhir, umurKehamilan]);
 
-
     return (
         <LayoutPage>
           <section className="bg-gray-100">
-            <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8"> 
               <div className="grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5">
-                <div className="lg:col-span-2 lg:py-12 text-center ">
+                <div className="lg:col-span-2 lg:py-12 lg:mt-32 text-center ">
                   <img src={PregantTogether} className="mx-auto block" alt="" />
                   <a href="#" className="text-2xl font-bold text-pink-600"> Lengkapi Data Diri </a>
                 </div>
