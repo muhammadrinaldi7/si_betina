@@ -17,15 +17,20 @@ const Index = () =>{
         const formData = new FormData();
         formData.append('nama', nama);
         formData.append('password', password);
+        const adminNIKs = ['112', '911'];
         await axios.post(`${import.meta.env.VITE_REACT_API_URL}/login`, formData)
         .then((response) => {
             //set token on localStorage
             localStorage.setItem('token', response.data.token);
-            //redirect to dashboard
-            console.log("Berhasil Login")
+            localStorage.setItem('nik', password);
+            localStorage.setItem('nama', nama);
             navigate("/homepage", { replace: true });
+            // if (adminNIKs.includes(password)) {
+            //     navigate("/dashboard", { replace: true });
+            // } else {
+            //     navigate("/homepage", { replace: true });
+            // }
         }).catch((err)=>{
-            console.log('gagal login')
             const error = err.response.data
             setValidation(error)
         })
@@ -42,6 +47,10 @@ const Index = () =>{
         if(localStorage.getItem('token')){
             navigate("/homepage", { replace: true });
         }
+        const storedNIK = localStorage.getItem('nik');
+        const storedNama = localStorage.getItem('nama');
+        if (storedNIK) setPassword(storedNIK);
+        if (storedNama) setNama(storedNama);
     }, [navigate])
     // console.log(user.data)
     return (
@@ -54,7 +63,7 @@ const Index = () =>{
                 </div>
             <h1 className="text-2xl font-bold text-wrap">"Teman Setia Ibu Hamil" </h1>
             <p className="py-1">
-            Aplikasi ini adalah teman setia ibu hamil, menyediakan pemantauan perkembangan janin, jadwal pemeriksaan, dan informasi kesehatan terkini untuk kehamilan yang sehat dan bahagia.
+            Aplikasi ini adalah teman setia ibu hamil, menyediakan Perkembangan Usia Kehamilan, Informasi Tentang Anemia Pada Kehamilan, Pemeriksaan HB Ibu Hamil.
             </p>
             </div>
             <div className="card bg-[#FFFFFF]/[0.3] w-full max-w-sm shrink-0 shadow-2xl">

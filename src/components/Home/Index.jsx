@@ -4,6 +4,8 @@ import LayoutPage from "../Layout/LayoutPage"
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
+import LogoKemenkes from "../../assets/kemenkes.png"
 const Index = () =>{
     const isAuth = localStorage.getItem('token');
     const [user, setUser] = useState({});
@@ -16,12 +18,13 @@ const Index = () =>{
                 sessionStorage.setItem('user_id', response.data.id);
             })
         } catch (error) {
-           if(error.response.status === 401){
+           if(error.response.status === 401 || error){
             localStorage.removeItem('token');
             navigate("/", { replace: true });
            }
         }
     }
+    // console.log(user)
     function handleToast () {
         if(sessionStorage.getItem('identityAddSuccess')){
             toast.success("Data Pendaftaran Berhasil", {
@@ -39,7 +42,6 @@ const Index = () =>{
             } , 4000)
         }
     }
-    console.log(user)
     useEffect(() => {
         
         if(!isAuth){
@@ -52,21 +54,22 @@ const Index = () =>{
     return (
         <LayoutPage>
             <ToastContainer />
-        <div className="w-ful items-center mx-auto my-auto py-28 px-4 text-center flex flex-col justify-center">
-            <img src={pregencyImg} className="" alt="" />
-            <h1 className="text-2xl font-extrabold text-gray-800/50 lg:text-3xl">
-            <p className="text-xl lg:text-4xl">Haii Ibu <strong className="text-rose-500 uppercase">{user.nama}</strong> </p>
-                Mari Kita Deteksi Anemia di Awal Kehamilan.
-                <strong className="block font-extrabold text-rose-500"> Healthy Pregnancy. </strong>
-            </h1>
-            <div className="mt-8 flex flex-wrap gap-4 text-center">
-                <a href="#" className="block w-full rounded bg-rose-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto">Get Started</a>
-                <a href="#"className="block w-full rounded bg-white px-12 py-3 text-sm font-medium text-rose-600 shadow hover:text-rose-700 focus:outline-none focus:ring active:text-rose-500 sm:w-auto"
-                >
-                Learn More
-                </a>
+            <img src={LogoKemenkes} className="top-0 w-1/2 p-2 rounded-lg shadow-lg lg:w-1/4 bg-white/85" alt="" />
+            <div className="flex flex-col items-center justify-center px-4 mx-auto my-auto text-center w-ful py-28">
+                <img src={pregencyImg} className="" alt="" />
+                <h1 className="text-2xl font-extrabold text-gray-800/50 lg:text-3xl">
+                <p className="text-xl lg:text-4xl">Haii Ibu <strong className="uppercase text-rose-500">{user.nama}</strong> </p>
+                    Mari Kita Deteksi Anemia di Awal Kehamilan.
+                    {/* <strong className="block font-extrabold text-rose-500"> Bumil Sehat. </strong> */}
+                </h1>
+                <div className="flex flex-wrap gap-4 mt-8 text-center">
+                    <Link to={"/education"} className="block w-full px-12 py-3 text-sm font-medium text-white rounded shadow-md bg-rose-600 hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto">Hamil Bebas Anemia</Link>
+                    {/* <a href="#"className="block w-full px-12 py-3 text-sm font-medium bg-white rounded shadow text-rose-600 hover:text-rose-700 focus:outline-none focus:ring active:text-rose-500 sm:w-auto"
+                    >
+                    
+                    </a> */}
+                </div>
             </div>
-        </div>
         </LayoutPage>
     )
 }

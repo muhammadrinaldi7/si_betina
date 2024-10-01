@@ -6,65 +6,77 @@ import axios from "axios";
 import NavbarSm from "../Home/NavbarSm";
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getUsers } from "../Service/user.service";
+import { getUserAuth } from "../Service/userAuth.service";
+import NavbarAdm from "../Home/NavbarAdm";
+import NavbarLgAdm from "../Home/NavbarLgAdm";
+
 const LayoutPage = ({children}) => {
     const navigate = useNavigate();
     const isAuth = localStorage.getItem('token');
-   
-    useEffect(() => {
-        if(!isAuth){
+    const nik = localStorage.getItem('nik');
+    const [user, setUser] = useState({});
+    const [identitasId, setIdentitasId] = useState(null);
+    const [hasFetched, setHasFetched] = useState(false); // State baru untuk mencegah fetch ulang
+
+    const getUser = async () => {
+        try {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${isAuth}`;
+            const response = await axios.get(`${import.meta.env.VITE_REACT_API_URL}/user`);
+            setUser(response.data);
+            sessionStorage.setItem('user_id', response.data.id);
+
+            // Cek identitas kehamilan aktif
+            const identitasAktif = response.data.identitas_bumil.filter((item) => item.status_kehamilan == 1);
+            if (identitasAktif.length > 0) {
+                setIdentitasId(identitasAktif[identitasAktif.length - 1]);
+                sessionStorage.setItem('identitas_id', identitasAktif[identitasAktif.length - 1].id);
+            }
+            setHasFetched(true); // Tandai bahwa data sudah di-fetch
+        } catch (error) {
+            // Arahkan ke halaman login jika token tidak valid
+            localStorage.removeItem('token');
             navigate("/", { replace: true });
         }
-    })
+    };
+    // console.log(user.identitas_bumil)
+    // console.log(identitasId)
+    useEffect(() => {
+        if (!isAuth) {
+            navigate("/", { replace: true });
+        } else if (!hasFetched) { // Hanya fetch jika belum di-fetch
+            getUser();
+        }
+    }, [isAuth, hasFetched, navigate]);
+
     const handleLogout = async () => {
-        localStorage.removeItem('token');
-        navigate("/", { replace: true });
-        // axios.defaults.headers.common['Authorization'] = `Bearer ${isAuth}`
-        // await axios.post(`${import.meta.env.VITE_REACT_API_URL}/logout`).then(() =>{
-        // localStorage.removeItem('token');
-        // })
-    }
+        const confirmLogout = window.confirm('Apakah Anda Ingin LogOut?');
+        if (confirmLogout) {
+            localStorage.removeItem('token');
+            sessionStorage.removeItem('user_id');
+            sessionStorage.removeItem('identitas_id');
+            navigate("/", { replace: true });
+        }
+    };
+
     return (
         <>
-        <section className="bg-gray-100/25 flex flex-wrap w-[90%] shadow-lg">
-            <div className="flex lg:hidden sticky top-5 z-[30] w-full  items-end mt-2 justify-end">
+        <section className=" flex flex-wrap w-[90%] shadow-lg">
+            <div className="flex lg:hidden sticky top-10 z-[30] w-full  items-center mt-2 justify-end">
+
                 <button className="lg:hidden btn btn-md " onClick={handleLogout}>Log Out <FontAwesomeIcon icon={faArrowCircleLeft}/></button>
             </div>
             <nav id="navLg" className="hidden lg:block w-full p-1 sticky top-0 z-[30]">
-            <NavbarLg/>
+            {nik == 112 ? <NavbarLgAdm/> : <NavbarLg/>}  
             </nav> 
-                <div className="relative w-full bg-white/30 rounded-sm bg-cover bg-center bg-no-repeat">
-                <div className="absolute inset-0 bg-white/30 sm:bg-transparent sm:from-gray-900/95 sm:to-gray-900/25 ltr:sm:bg-gradient-to-r rtl:sm:bg-gradient-to-l"></div>
+                <div className="relative w-full bg-center bg-no-repeat bg-cover rounded-sm">
+                <div className="absolute inset-0"></div>
                     <div className="relative min-h-[80vh]">
-                        {/* <div className="max-w-xl text-center flex flex-wrap justify-center">
-                        <img src={pregencyImg} className="" alt="" />
-                        
-                        <h1 className="text-2xl font-extrabold text-gray-800/50 lg:text-3xl">
-                            <p className="text-xl lg:text-4xl">Haii Ibu <strong className="text-rose-500 uppercase">{user.nama}</strong> </p>
-                            Mari Kita Deteksi Anemia di Awal Kehamilan.
-                            <strong className="block font-extrabold text-rose-500"> Healthy Pregnancy. </strong>
-                        </h1>
-
-                        <div className="mt-8 flex flex-wrap gap-4 text-center">
-                            <a
-                            href="#"
-                            className="block w-full rounded bg-rose-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto"
-                            >
-                            Get Started
-                            </a>
-
-                            <a
-                            href="#"
-                            className="block w-full rounded bg-white px-12 py-3 text-sm font-medium text-rose-600 shadow hover:text-rose-700 focus:outline-none focus:ring active:text-rose-500 sm:w-auto"
-                            >
-                            Learn More
-                            </a>
-                        </div>
-                        </div> */}
                         {children}
                     </div>
                 </div>
             <nav id="navSm" className="block lg:hidden w-full p-1 sticky bottom-0 z-[30]">
-            <NavbarSm/>
+            {nik == 112 ? <NavbarAdm/> : <NavbarSm/>}    
             </nav>
         </section>
         </>
